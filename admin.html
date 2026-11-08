@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#f5f4ef">
+  <link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icon.svg" type="image/svg+xml"><link rel="stylesheet" href="/src/styles.css"><link rel="stylesheet" href="/src/admin.css">
+  <title>Admin desk — Foundly</title>
+</head>
+<body class="admin-body">
+  <header class="topbar admin-topbar wrap"><a class="brand" href="/"><span class="brand-icon"><svg viewBox="0 0 30 30" fill="none" aria-hidden="true"><path d="M15 25s-9-5.5-9-13A5.4 5.4 0 0 1 15 8a5.4 5.4 0 0 1 9 4c0 7.5-9 13-9 13Z" stroke="currentColor" stroke-width="1.8"/><path d="m11.8 15.2 2.2 2.1 4.8-5.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>foundly<span class="brand-dot">.</span></span></a><div class="admin-title"><span class="admin-lock">▣</span> Admin desk</div><a class="back-link" href="/">← Community board</a></header>
+  <main class="admin-wrap wrap">
+    <section class="admin-login-card" id="loginCard" hidden>
+      <div class="eyebrow small-eyebrow">Private area</div><h1 id="adminFormTitle">Admin sign in.</h1><p id="adminFormSubtitle">Manage the board and view account details.</p>
+      <form id="adminLoginForm" class="admin-form">
+        <label class="field"><span>Admin email</span><input type="email" name="email" required autocomplete="username" placeholder="admin@example.com"></label>
+        <label class="field"><span>Password</span><input type="password" name="password" required autocomplete="current-password" placeholder="Your admin password"></label>
+        <div class="admin-error" id="loginError" role="alert"></div><button class="button button-primary button-wide" type="submit" id="adminLoginSubmit">Sign in to admin</button>
+      </form>
+      <div class="admin-login-foot"><span class="admin-shield">♢</span><span>Admin access is granted by the project owner in Supabase. Community accounts cannot promote themselves.</span></div>
+    </section>
+
+    <section id="adminDashboard" hidden>
+      <div class="admin-welcome"><div><div class="eyebrow small-eyebrow">Foundly operations</div><h1>Keep the board kind.</h1><p>Review community posts and manage account details.</p></div><div class="admin-who"><span class="admin-avatar" id="adminInitial">A</span><span><strong id="adminName">Administrator</strong><small>Administrator</small></span><button class="button button-outline" id="adminRefresh">Refresh</button><button class="button button-outline" id="adminLogout">Sign out</button></div></div>
+      <div class="admin-metrics"><article><small>Open listings</small><strong id="metricOpen">0</strong><span>Visible on community board</span></article><article><small>Closed listings</small><strong id="metricClosed">0</strong><span>Marked returned or resolved</span></article><article><small>People</small><strong id="metricUsers">0</strong><span>Community accounts</span></article><article><small>Hidden listings</small><strong id="metricHidden">0</strong><span>Not visible to the board</span></article></div>
+      <div class="admin-workspace">
+        <div class="admin-tabs" role="tablist"><button class="admin-tab active" data-admin-tab="reports">Listings <span id="tabReportCount">0</span></button><button class="admin-tab" data-admin-tab="users">People <span id="tabUserCount">0</span></button></div>
+        <section class="admin-view active" id="reportsView"><div class="admin-view-head"><div><h2>All listings</h2><p>Review uploads, reopen resolved posts, or remove a listing.</p></div><div class="admin-tools"><select id="adminStatusFilter" aria-label="Filter listing status"><option value="all">All statuses</option><option value="open">Open</option><option value="closed">Closed</option><option value="hidden">Hidden</option></select><label class="admin-search"><span>⌕</span><input id="reportSearch" type="search" placeholder="Search listings"></label></div></div><div class="table-wrap"><table><thead><tr><th>Listing</th><th>Owner · contact details</th><th>Date</th><th>Status</th><th>Manage</th></tr></thead><tbody id="adminReports"><tr><td colspan="5" class="table-empty">Loading the board…</td></tr></tbody></table></div></section>
+        <section class="admin-view" id="usersView"><div class="admin-view-head"><div><h2>Community accounts</h2><p>Account details are only shown inside this admin area.</p></div><div class="admin-tools"><button class="button button-outline" id="exportUsers">Export people CSV ↓</button><label class="admin-search"><span>⌕</span><input id="userSearch" type="search" placeholder="Search people"></label></div></div><div class="table-wrap"><table><thead><tr><th>Person</th><th>Email</th><th>Phone</th><th>Listings</th><th>Joined</th></tr></thead><tbody id="adminUsers"><tr><td colspan="5" class="table-empty">Loading people…</td></tr></tbody></table></div></section>
+      </div>
+      <p class="admin-data-note"><span>♢</span> Account contact details are visible only to admins and the account owner.</p>
+    </section>
+  </main>
+  <div class="toast" id="adminToast" role="status" aria-live="polite"></div>
+  <script type="module" src="/src/admin.js"></script>
+</body>
+</html>

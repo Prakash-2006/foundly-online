@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f4ef">
+  <meta name="description" content="A shared online lost and found board with private chat and AI-assisted item matching.">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/src/styles.css">
+  <title>Foundly Online — Lost &amp; Found</title>
+</head>
+<body>
+  <div class="offline-ribbon" id="offlineRibbon" hidden><span class="pulse"></span> You are offline · shared listings and chat need a connection</div>
+  <header class="topbar wrap">
+    <a class="brand" href="/" aria-label="Foundly home"><span class="brand-icon"><svg viewBox="0 0 30 30" fill="none" aria-hidden="true"><path d="M15 25s-9-5.5-9-13A5.4 5.4 0 0 1 15 8a5.4 5.4 0 0 1 9 4c0 7.5-9 13-9 13Z" stroke="currentColor" stroke-width="1.8"/><path d="m11.8 15.2 2.2 2.1 4.8-5.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>foundly<span class="brand-dot">.</span></span></a>
+    <nav class="navlinks"><a href="#matches">Matches</a><a href="#board">Community board</a><a class="admin-link" href="/admin.html">Admin</a></nav>
+    <div class="header-actions"><button class="button button-quiet" id="authButton">Sign in</button><button class="avatar-button" id="profileButton" hidden aria-label="Your account"><span id="avatarInitial">F</span></button></div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="eyebrow-mark">✳</span> A little help finding your way back</div>
+        <h1>Lost things.<br><em>Found people.</em></h1>
+        <p>Share what went missing or what you picked up. Foundly looks for the little details that bring the two together.</p>
+        <div class="hero-actions"><button class="button button-primary" id="heroPost">Post an item <span aria-hidden="true">↗</span></button><a class="text-link" href="#matches">See possible matches <span aria-hidden="true">↓</span></a></div>
+        <div class="hero-proof"><span class="proof-avatars"><b>m</b><b>r</b><b>a</b></span><span><strong id="reportCountHero">0 items</strong> on the community board</span></div>
+      </div>
+      <div class="hero-art" aria-label="Illustration of a found key and tag">
+        <div class="art-sun"></div><div class="art-doodle doodle-one">✳</div><div class="art-doodle doodle-two">···</div>
+        <div class="art-card card-back"><span class="card-back-line"></span><span class="card-back-dot"></span></div>
+        <div class="art-keyring"><div class="key-ring"></div><div class="key-shaft"></div><div class="key-tooth tooth-a"></div><div class="key-tooth tooth-b"></div><div class="key-spark">✦</div></div>
+        <div class="art-tag"><span class="tag-hole"></span><span class="tag-word">FOUND</span><span class="tag-line"></span><span class="tag-smile">⌣</span></div>
+        <div class="art-caption"><span class="caption-star">✳</span><span>the right details<br>make the difference</span></div>
+      </div>
+    </section>
+
+    <section class="quick-stats" aria-label="Community totals"><div class="quick-stat"><span class="stat-icon">◉</span><span><strong id="totalReports">0</strong><small>open listings</small></span></div><div class="stat-rule"></div><div class="quick-stat"><span class="stat-icon stat-green">✦</span><span><strong id="totalMatches">0</strong><small>possible matches</small></span></div><div class="stat-note"><span class="green-dot"></span><span id="aiState">Local-first · ready when you are</span></div></section>
+
+    <section class="section-block" id="matches">
+      <div class="section-heading"><div><div class="eyebrow small-eyebrow">A second set of eyes</div><h2>Possible matches<span class="heading-period">.</span></h2><p>Promising pairs appear here as soon as an item is posted.</p></div><button class="button button-outline" id="refreshMatches" aria-label="Refresh matches"><span class="refresh-icon">↻</span> Refresh</button></div>
+      <div class="match-grid" id="matchGrid"><div class="loading-card"><span class="spinner"></span>Finding likely pairs…</div></div>
+    </section>
+
+    <section class="section-block board-section" id="board">
+      <div class="section-heading board-heading"><div><div class="eyebrow small-eyebrow">From your neighbors</div><h2>On the board<span class="heading-period">.</span></h2><p>Browse recent lost and found reports from the community.</p></div><button class="button button-primary button-sm" id="boardPost">+ Add a listing</button></div>
+      <div class="board-controls"><div class="segmented" role="group" aria-label="Filter listing type"><button class="segment active" data-filter="all">Everything <span id="filterAllCount">0</span></button><button class="segment" data-filter="lost">Lost</button><button class="segment" data-filter="found">Found</button></div><label class="searchbox"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4.4 4.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><input type="search" id="searchInput" placeholder="Find a listing" aria-label="Search listings"></label><select id="sortSelect" class="sort-select" aria-label="Sort listings"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></div>
+      <div class="pending-area" id="pendingArea"></div>
+      <div class="report-grid" id="reportGrid"><div class="loading-card"><span class="spinner"></span>Loading the board…</div></div>
+      <div class="board-footer"><span id="boardSummary">Showing recent listings</span><button class="text-link" id="loadMore">Show all listings <span aria-hidden="true">↓</span></button></div>
+    </section>
+    <section class="kind-note"><div class="kind-note-icon">☼</div><div><strong>Found something? Keep one detail back.</strong><p>For wallets, bags, and devices, leave a distinctive detail private. It helps the rightful owner confirm it’s theirs.</p></div><span class="note-decoration">✳</span></section>
+  </main>
+  <footer class="footer wrap"><a class="brand footer-brand" href="/"><span class="brand-icon"><svg viewBox="0 0 30 30" fill="none" aria-hidden="true"><path d="M15 25s-9-5.5-9-13A5.4 5.4 0 0 1 15 8a5.4 5.4 0 0 1 9 4c0 7.5-9 13-9 13Z" stroke="currentColor" stroke-width="1.8"/><path d="m11.8 15.2 2.2 2.1 4.8-5.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>foundly<span class="brand-dot">.</span></span></a><span>Good things find their way back.</span><a href="/admin.html" class="footer-admin">Admin desk ↗</a></footer>
+  </div>
+
+  <dialog class="modal" id="authDialog">
+    <div class="modal-top"><a class="brand" href="#"><span class="brand-icon"><svg viewBox="0 0 30 30" fill="none" aria-hidden="true"><path d="M15 25s-9-5.5-9-13A5.4 5.4 0 0 1 15 8a5.4 5.4 0 0 1 9 4c0 7.5-9 13-9 13Z" stroke="currentColor" stroke-width="1.8"/><path d="m11.8 15.2 2.2 2.1 4.8-5.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>foundly<span class="brand-dot">.</span></span></a><button class="icon-button" data-close="authDialog" aria-label="Close">×</button></div>
+    <div class="modal-content"><div class="eyebrow small-eyebrow">Your neighborhood board</div><h2 id="authTitle">Welcome back.</h2><p class="modal-subtitle" id="authSubtitle">Sign in to post an item and message the other person.</p>
+      <div class="auth-tabs"><button class="auth-tab active" data-auth-mode="login">Sign in</button><button class="auth-tab" data-auth-mode="register">Create account</button></div>
+      <form id="authForm" class="form-stack">
+        <label class="field" id="usernameField" hidden><span>Your name</span><input name="username" minlength="2" maxlength="32" autocomplete="name" placeholder="How people know you"></label>
+        <label class="field"><span>Email</span><input name="email" type="email" required autocomplete="email" placeholder="you@example.com"></label>
+        <label class="field" id="phoneField" hidden><span>Phone number <small>private unless you choose to share it</small></span><input name="phone" type="tel" autocomplete="tel" placeholder="+1 555 010 0000"></label>
+        <label class="field"><span>Password <small id="passwordHint"></small></span><input name="password" type="password" required autocomplete="current-password" placeholder="Your password"></label>
+        <div class="form-error" id="authError" role="alert"></div><button class="button button-primary button-wide" type="submit" id="authSubmit">Sign in</button>
+      </form>
+      <p class="privacy-copy">Your email and phone stay private. Only your chosen name appears on a listing.</p>
+    </div>
+  </dialog>
+
+  <dialog class="modal modal-wide" id="reportDialog">
+    <div class="modal-top"><span class="modal-overline">Help something find its way home</span><button class="icon-button" data-close="reportDialog" aria-label="Close">×</button></div>
+    <div class="modal-content"><div class="eyebrow small-eyebrow">Make a listing</div><h2>Tell us what happened.</h2><p class="modal-subtitle">Add a clear photo and the details you remember. Your number stays private.</p>
+      <form id="reportForm" class="report-form">
+        <div class="type-select" role="group" aria-label="Report type"><button class="type-option active" type="button" data-type="lost"><span class="type-emoji">⌕</span><span><strong>I lost something</strong><small>Help me find it</small></span></button><button class="type-option" type="button" data-type="found"><span class="type-emoji found-emoji">✳</span><span><strong>I found something</strong><small>Help me find its owner</small></span></button></div>
+        <label class="photo-drop" for="reportPhoto"><input id="reportPhoto" name="photo" type="file" accept="image/jpeg,image/png,image/webp" required><span class="photo-placeholder" id="photoPlaceholder"><b class="photo-plus">＋</b><strong>Add a photo</strong><small>JPG, PNG, or WebP · up to 10 MB</small></span><img id="photoPreview" alt="Preview of the selected item" hidden><button class="remove-photo" id="removePhoto" type="button" hidden aria-label="Remove photo">×</button></label>
+        <div class="report-fields">
+          <label class="field"><span>Item name</span><input name="name" required maxlength="70" placeholder="e.g. Blue canvas backpack"></label>
+          <label class="field"><span>Category</span><select name="category" required><option value="">Choose a category</option><option>Accessories</option><option>Bag</option><option>Books</option><option>Clothing</option><option>Electronics</option><option>Keys</option><option>Wallet</option><option>Water bottle</option><option>Umbrella</option><option>Other</option></select></label>
+          <label class="field"><span>Main color</span><input name="color" maxlength="40" placeholder="e.g. Navy blue"></label>
+          <label class="field"><span>Where was it lost or found?</span><input name="location" required maxlength="100" placeholder="Building, street, or nearby landmark"></label>
+          <label class="field"><span>Date</span><input name="date" id="reportDate" type="date" required></label>
+          <label class="field field-full"><span>Distinctive details <small>These details are public on the board</small></span><textarea name="description" maxlength="500" rows="3" placeholder="Brand, marks, case, keychain, or other useful clues"></textarea></label>
+        </div>
+        <p class="ai-consent"><span>i</span> Leave phone numbers and home addresses out of the listing. Your number stays private unless you share it in a match chat.</p>
+        <p class="ai-consent"><span>✦</span> When Gemini is set up, this photo and item description may be sent to Google to compare possible matches. Your name, email, and phone are not sent.</p>
+        <div class="form-error" id="reportError" role="alert"></div><button class="button button-primary button-wide" type="submit"><span id="reportSubmitLabel">Post lost item</span><span aria-hidden="true">↗</span></button>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog class="modal modal-wide chat-modal" id="chatDialog">
+    <div class="chat-head"><div><div class="eyebrow small-eyebrow">Private conversation</div><h2 id="chatTitle">Talk about a possible match</h2><p id="chatSubtitle"></p></div><button class="icon-button" data-close="chatDialog" aria-label="Close">×</button></div>
+    <div class="chat-thread" id="chatThread" aria-live="polite"></div>
+    <div class="contact-share" id="contactShare"></div>
+    <form id="messageForm" class="message-form"><input name="body" maxlength="2000" placeholder="Write a kind, clear message…" required aria-label="Message"><button class="button button-primary" type="submit">Send <span>↑</span></button></form>
+  </dialog>
+
+  <dialog class="modal profile-modal" id="profileDialog"><div class="modal-top"><div class="eyebrow small-eyebrow">Your account</div><button class="icon-button" data-close="profileDialog" aria-label="Close">×</button></div><div class="modal-content"><div class="profile-avatar" id="profileInitial">F</div><h2 id="profileName">Your profile</h2><div class="profile-details"><div><small>Email</small><strong id="profileEmail"></strong></div><div><small>Phone · private by default</small><strong id="profilePhone"></strong></div></div><button class="button button-outline button-wide" id="logoutButton">Sign out</button></div></dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+project_id = "foundly-online"
+
+[functions.match-report]
+verify_jwt = true
