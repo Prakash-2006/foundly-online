@@ -4,6 +4,8 @@ Foundly Online is the shared, multi-device version of the lost-and-found app. A 
 
 The earlier laptop-only version is kept separately in `outputs/foundly-offline`. This folder is the new online project.
 
+For a copy/paste deployment walkthrough with the exact Windows PowerShell commands and photo-storage permissions, see [`SETUP_TWO_LAPTOPS.md`](SETUP_TWO_LAPTOPS.md).
+
 ## What it includes
 
 - Separate community and admin sign-in pages.
